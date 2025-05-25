@@ -1,0 +1,11 @@
+<svg width="140" height="40" viewBox="0 0 140 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Red luggage icon -->
+  <rect x="8" y="12" width="16" height="12" rx="2" fill="#FF6B6B" stroke="#FF5555" stroke-width="1"/>
+  <rect x="10" y="14" width="12" height="8" rx="1" fill="#FF5555"/>
+  <circle cx="11" cy="26" r="1.5" fill="#FF6B6B"/>
+  <circle cx="21" cy="26" r="1.5" fill="#FF6B6B"/>
+  <rect x="14" y="10" width="2" height="3" rx="1" fill="#FF6B6B"/>
+  
+  <!-- Korean text "캐리드롭" -->
+  <text x="32" y="28" font-family="Arial, sans-serif" font-size="18" fill="#FF6B6B" font-weight="bold">캐리드롭</text>
+</svg> 
