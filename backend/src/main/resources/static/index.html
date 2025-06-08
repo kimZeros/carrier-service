@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarryDrop 데이터베이스 관리</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .link-card {
+            display: block;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            text-decoration: none;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        .link-card:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+        .link-card h3 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+            font-size: 1.3em;
+        }
+        .link-card p {
+            margin: 0;
+            color: #666;
+            line-height: 1.5;
+        }
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .code {
+            background: #f1f3f4;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏨 CarryDrop</h1>
+            <p>데이터베이스 관리 및 테스트 도구</p>
+        </div>
+
+        <div class="content">
+            <h2>📊 데이터베이스 접근</h2>
+            
+            <a href="/test.html" class="link-card">
+                <h3>🔍 API 테스트 페이지 <span class="badge">NEW</span></h3>
+                <p>MyBatis XML로 생성된 숙소 데이터를 카드 형태로 예쁘게 볼 수 있습니다. API 응답도 JSON 형태로 확인 가능합니다.</p>
+            </a>
+
+            <a href="/h2-console" class="link-card" target="_blank">
+                <h3>🗄️ H2 데이터베이스 콘솔</h3>
+                <p>직접 SQL 쿼리를 실행하고 테이블 구조를 확인할 수 있습니다.</p>
+            </a>
+
+            <div class="info-box">
+                <h4>📋 H2 데이터베이스 연결 정보</h4>
+                <p><strong>JDBC URL:</strong> <span class="code">jdbc:h2:mem:testdb</span></p>
+                <p><strong>사용자 이름:</strong> <span class="code">sa</span></p>
+                <p><strong>비밀번호:</strong> <span class="code">(비어있음)</span></p>
+            </div>
+
+            <h2>🚀 API 엔드포인트</h2>
+            
+            <div class="link-card">
+                <h3>📍 GET /api/accommodations/active</h3>
+                <p>활성화된 숙소 목록을 조회합니다.</p>
+                <p><strong>URL:</strong> <span class="code">http://localhost:8080/api/accommodations/active</span></p>
+            </div>
+
+            <div class="link-card">
+                <h3>📍 GET /api/accommodations</h3>
+                <p>전체 숙소 목록을 조회합니다.</p>
+                <p><strong>URL:</strong> <span class="code">http://localhost:8080/api/accommodations</span></p>
+            </div>
+
+            <h2>📊 현재 데이터</h2>
+            <div class="info-box">
+                <p>✅ <strong>5개의 테스트 숙소</strong>가 자동으로 생성되었습니다.</p>
+                <p>📍 도쿄 스테이션 호텔, 시부야 크로싱 호텔, 신주쿠 프리미어 호텔, 도톤보리 리버 호텔, 기온 헤리티지 료칸</p>
+                <p>💰 가격대: ₩25,000 ~ ₩45,000</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -2,33 +2,28 @@ spring:
   application:
     name: carrydrop-api
   
-  # 데이터베이스 설정 (NeonDB PostgreSQL)
+  # 데이터베이스 설정 (기본: NeonDB PostgreSQL)
   datasource:
     url: postgresql://neondb_owner:npg_sdMQ1b5JzAhK@ep-calm-rain-a139nit8-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
     username: neondb_owner
     password: npg_sdMQ1b5JzAhK
     driver-class-name: org.postgresql.Driver
   
-  # H2 데이터베이스 설정 (개발용)
-  h2:
-    console:
+  # SQL 스크립트 자동 실행
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+      data-locations: classpath:data.sql
+      encoding: UTF-8
+  
+  # HTTP 인코딩 설정
+  http:
+    encoding:
+      charset: UTF-8
       enabled: true
-      path: /h2-console
+      force: true
   
-  # JPA 설정
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-  
-  # Flyway 설정 (비활성화 - Hibernate가 스키마 관리)
-  flyway:
-    enabled: false
-    
   # 보안 설정
   security:
     oauth2:
@@ -37,6 +32,12 @@ spring:
           google:
             client-id: ${GOOGLE_CLIENT_ID:your-google-client-id}
             client-secret: ${GOOGLE_CLIENT_SECRET:your-google-client-secret}
+
+# MyBatis 설정
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 # JWT 설정
 app:
@@ -48,33 +49,32 @@ app:
 server:
   port: 8080
   servlet:
-    context-path: /api
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
 
 # 로깅 설정
 logging:
   level:
     com.carrydrop: DEBUG
     org.springframework.security: DEBUG
-    org.hibernate.SQL: DEBUG
-    org.hibernate.type.descriptor.sql: TRACE
 
 # 개발환경별 프로필 설정
 ---
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: h2
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
     username: sa
     password: 
     driver-class-name: org.h2.Driver
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
 
 ---
 spring:
@@ -85,10 +85,6 @@ spring:
     url: ${DATABASE_URL}
     username: ${DATABASE_USERNAME}
     password: ${DATABASE_PASSWORD}
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: false
 logging:
   level:
     com.carrydrop: INFO

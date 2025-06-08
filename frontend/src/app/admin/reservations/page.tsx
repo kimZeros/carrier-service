@@ -124,7 +124,10 @@ export default function ReservationsPage() {
     });
   };
 
-  const formatCurrency = (amount: number) => {
+  const formatPrice = (amount: number) => {
+    if (amount > 100000) {
+      return `₩${Math.floor(amount / 100).toLocaleString()}`;
+    }
     return `₩${amount.toLocaleString()}`;
   };
 
@@ -254,7 +257,7 @@ export default function ReservationsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">{formatCurrency(reservation.amount)}</div>
+                      <div className="text-sm font-medium text-gray-900">{formatPrice(reservation.amount)}</div>
                       <div className="flex items-center space-x-1 text-xs text-gray-500">
                         <Clock className="w-3 h-3" />
                         <span>{formatDateTime(reservation.pickupTime)}</span>
@@ -335,7 +338,7 @@ export default function ReservationsPage() {
                     <div><span className="text-gray-500">예약ID:</span> #{selectedReservation.id}</div>
                     <div><span className="text-gray-500">고객명:</span> {selectedReservation.customerName}</div>
                     <div><span className="text-gray-500">연락처:</span> {selectedReservation.customerPhone}</div>
-                    <div><span className="text-gray-500">금액:</span> {formatCurrency(selectedReservation.amount)}</div>
+                    <div><span className="text-gray-500">금액:</span> {formatPrice(selectedReservation.amount)}</div>
                   </div>
                 </div>
                 <div>

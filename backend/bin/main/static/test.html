@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarryDrop DB 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .btn:hover {
+            background: #5a6fd8;
+        }
+        .result {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .accommodation-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .accommodation-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .accommodation-info {
+            color: #666;
+            margin: 5px 0;
+        }
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .status {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.active {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏨 CarryDrop DB 테스트 페이지</h1>
+        <p>MyBatis XML + PostgreSQL/H2 데이터베이스 연동 테스트</p>
+    </div>
+
+    <div class="test-section">
+        <h2>🔍 API 테스트</h2>
+        <button class="btn" onclick="testActiveAccommodations()">활성 숙소 조회</button>
+        <button class="btn" onclick="testAllAccommodations()">전체 숙소 조회</button>
+        <button class="btn" onclick="clearResult()">결과 지우기</button>
+        <div id="api-result" class="result" style="display: none;"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🏨 숙소 데이터 (카드 형태)</h2>
+        <button class="btn" onclick="loadAccommodationsCards()">숙소 데이터 로드</button>
+        <div id="accommodations-cards"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+
+        async function testActiveAccommodations() {
+            try {
+                showLoading('api-result');
+                const response = await fetch(`${API_BASE}/accommodations/active`);
+                const data = await response.json();
+                
+                document.getElementById('api-result').style.display = 'block';
+                document.getElementById('api-result').textContent = 
+                    `활성 숙소 ${data.length}개:\n\n` + JSON.stringify(data, null, 2);
+            } catch (error) {
+                showError('api-result', error);
+            }
+        }
+
+        async function testAllAccommodations() {
+            try {
+                showLoading('api-result');
+                const response = await fetch(`${API_BASE}/accommodations`);
+                const data = await response.json();
+                
+                document.getElementById('api-result').style.display = 'block';
+                document.getElementById('api-result').textContent = 
+                    `전체 숙소 ${data.length}개:\n\n` + JSON.stringify(data, null, 2);
+            } catch (error) {
+                showError('api-result', error);
+            }
+        }
+
+        async function loadAccommodationsCards() {
+            try {
+                showLoading('accommodations-cards');
+                const response = await fetch(`${API_BASE}/accommodations/active`);
+                const accommodations = await response.json();
+                
+                const cardsHtml = accommodations.map(acc => `
+                    <div class="accommodation-card">
+                        <div class="accommodation-title">
+                            ${acc.name}
+                            <span class="status ${acc.isActive ? 'active' : 'inactive'}">
+                                ${acc.isActive ? '활성' : '비활성'}
+                            </span>
+                        </div>
+                        <div class="accommodation-info">📍 ${acc.address}</div>
+                        ${acc.detailAddress ? `<div class="accommodation-info">🏢 ${acc.detailAddress}</div>` : ''}
+                        <div class="accommodation-info">🕐 ${acc.deliveryStartTime} - ${acc.deliveryEndTime}</div>
+                        <div class="accommodation-info">📦 배송비: <span class="price">₩${acc.deliveryFee.toLocaleString()}</span></div>
+                        <div class="accommodation-info">🗺️ ${acc.latitude.toFixed(4)}, ${acc.longitude.toFixed(4)}</div>
+                        ${acc.notes ? `<div class="accommodation-info">💬 ${acc.notes}</div>` : ''}
+                        ${acc.accessCode ? `<div class="accommodation-info">🔑 출입코드: ${acc.accessCode}</div>` : ''}
+                        ${acc.accessInstructions ? `<div class="accommodation-info">📋 ${acc.accessInstructions}</div>` : ''}
+                    </div>
+                `).join('');
+                
+                document.getElementById('accommodations-cards').innerHTML = 
+                    `<h3>총 ${accommodations.length}개의 숙소</h3>` + cardsHtml;
+                    
+            } catch (error) {
+                document.getElementById('accommodations-cards').innerHTML = 
+                    `<div style="color: red;">❌ 오류: ${error.message}</div>`;
+            }
+        }
+
+        function showLoading(elementId) {
+            document.getElementById(elementId).innerHTML = '⏳ 로딩 중...';
+            document.getElementById(elementId).style.display = 'block';
+        }
+
+        function showError(elementId, error) {
+            document.getElementById(elementId).style.display = 'block';
+            document.getElementById(elementId).textContent = `❌ 오류: ${error.message}`;
+        }
+
+        function clearResult() {
+            document.getElementById('api-result').style.display = 'none';
+            document.getElementById('api-result').textContent = '';
+        }
+
+        // 페이지 로드 시 자동으로 데이터 확인
+        window.onload = function() {
+            setTimeout(() => {
+                loadAccommodationsCards();
+            }, 1000);
+        };
+    </script>
+</body>
+</html> 

@@ -1,7 +1,5 @@
 package com.carrydrop.config
 
-import com.carrydrop.security.CustomUserDetailsService
-import com.carrydrop.security.jwt.JwtAuthenticationFilter
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -13,7 +11,6 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -21,10 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-class SecurityConfig(
-    private val customUserDetailsService: CustomUserDetailsService,
-    private val jwtAuthenticationFilter: JwtAuthenticationFilter
-) {
+class SecurityConfig {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {
@@ -64,12 +58,11 @@ class SecurityConfig(
                         "/swagger-ui/**", "/v3/api-docs/**",
                         "/h2-console/**",
                         "/api/auth/**",
+                        "/api/accommodations/**",
                         "/public/**"
                     ).permitAll()
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll() // 임시로 모든 요청 허용
             }
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
     }

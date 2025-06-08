@@ -412,21 +412,21 @@ export default async function Page({ params }: PageProps) {
               <div className="text-5xl mb-6">🏨</div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">호텔 & 료칸</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">프론트 데스크에서 짐 픽업/수령이 가능한 프리미엄 숙소들</p>
-              <div className="text-purple-600 font-bold">₩10,000,000 - ₩62,500,000</div>
+              <div className="text-purple-600 font-bold">₩25,000 - ₩125,000</div>
             </div>
             
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all text-center transform hover:-translate-y-2">
               <div className="text-5xl mb-6">🏠</div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">에어비앤비</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">현지인처럼 머물며 호스트와 협의하여 짐 배송 시간 조율</p>
-              <div className="text-purple-600 font-bold">₩3,750,000 - ₩18,750,000</div>
+              <div className="text-purple-600 font-bold">₩35,000 - ₩85,000</div>
             </div>
             
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all text-center transform hover:-translate-y-2">
               <div className="text-5xl mb-6">🛏️</div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">게스트하우스</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">공용 짐 보관소에서 픽업/배송 가능한 경제적인 숙소</p>
-              <div className="text-purple-600 font-bold">₩3,125,000 - ₩7,500,000</div>
+              <div className="text-purple-600 font-bold">₩30,000 - ₩65,000</div>
             </div>
           </div>
 
@@ -440,7 +440,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">시부야 스카이 호텔</h4>
                     <p className="text-sm text-gray-600">시부야역 도보 3분 • CarryDrop 제휴</p>
                   </div>
-                  <div className="text-purple-600 font-bold">₩15,000,000</div>
+                  <div className="text-purple-600 font-bold">₩25,000</div>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                   <div className="text-3xl">⛩️</div>
@@ -448,7 +448,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">아사쿠사 전통 료칸</h4>
                     <p className="text-sm text-gray-600">센소지 도보 5분 • VIP 짐 서비스</p>
                   </div>
-                  <div className="text-purple-600 font-bold">₩35,000,000</div>
+                  <div className="text-purple-600 font-bold">₩45,000</div>
                 </div>
               </div>
             </div>
@@ -462,7 +462,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">도톤보리 리버사이드</h4>
                     <p className="text-sm text-gray-600">도톤보리 중심가 • 강변 뷰</p>
                   </div>
-                  <div className="text-purple-600 font-bold">₩18,750,000</div>
+                  <div className="text-purple-600 font-bold">₩35,000</div>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                   <div className="text-3xl">🎋</div>
@@ -470,7 +470,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">기온 헤리티지 인</h4>
                     <p className="text-sm text-gray-600">기온 게이샤 구역 • 전통 문화 체험</p>
                   </div>
-                  <div className="text-purple-600 font-bold">₩43,750,000</div>
+                  <div className="text-purple-600 font-bold">₩55,000</div>
                 </div>
               </div>
             </div>

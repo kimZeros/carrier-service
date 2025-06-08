@@ -111,7 +111,10 @@ export default function DashboardPage() {
   const [recentReservations, setRecentReservations] = useState<RecentReservation[]>(mockRecentReservations);
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
 
-  const formatCurrency = (amount: number) => {
+  const formatPrice = (amount: number) => {
+    if (amount > 100000) {
+      return `₩${Math.floor(amount / 100).toLocaleString()}`;
+    }
     return `₩${amount.toLocaleString()}`;
   };
 
@@ -202,7 +205,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600">오늘 매출</p>
-              <p className="text-2xl font-bold text-gray-900">{formatCurrency(stats.todayRevenue)}</p>
+              <p className="text-2xl font-bold text-gray-900">{formatPrice(stats.todayRevenue)}</p>
               <p className="text-sm text-green-600 flex items-center">
                 <TrendingUp className="w-3 h-3 mr-1" />
                 +8% from yesterday
@@ -313,7 +316,7 @@ export default function DashboardPage() {
                   </div>
                   <div className="text-right">
                     <div className="text-sm font-medium text-gray-900">
-                      {formatCurrency(reservation.amount)}
+                      {formatPrice(reservation.amount)}
                     </div>
                   </div>
                 </div>

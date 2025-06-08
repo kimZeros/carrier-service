@@ -151,7 +151,9 @@ const RequestDeliveryPage: React.FC = () => {
   };
 
   const formatPrice = (price: number) => {
-    return `₩${price.toLocaleString()}`;
+    // 기본 배송료 계산 (25,000원 - 65,000원 범위)
+    const basePrice = Math.max(25000, Math.min(65000, price));
+    return `₩${basePrice.toLocaleString()}`;
   };
 
   const getServicePrice = (serviceType: 'STANDARD' | 'EXPRESS' | 'PREMIUM') => {

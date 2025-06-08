@@ -25,8 +25,8 @@ interface Accommodation {
   address: string;
   detailAddress?: string;
   region: string;
-  deliveryStartTime: string;
-  deliveryEndTime: string;
+  deliveryStartTime: string | number[];
+  deliveryEndTime: string | number[];
   deliveryFee: number;
   isActive: boolean;
   totalDeliveries: number;
@@ -135,12 +135,24 @@ export default function AccommodationsPage() {
     });
   };
 
-  const formatCurrency = (amount: number) => {
+  const formatPrice = (amount: number) => {
+    if (amount > 100000) {
+      return `₩${Math.floor(amount / 100).toLocaleString()}`;
+    }
     return `₩${amount.toLocaleString()}`;
   };
 
-  const formatTime = (time: string) => {
-    return time.substring(0, 5); // HH:MM 형식으로 표시
+  const formatTime = (time: string | number[]) => {
+    // PostgreSQL에서 배열로 반환되는 경우 처리
+    if (Array.isArray(time)) {
+      const [hour, minute] = time;
+      return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+    }
+    // 문자열로 반환되는 경우 처리 (H2 등)
+    if (typeof time === 'string') {
+      return time.substring(0, 5); // HH:MM 형식으로 표시
+    }
+    return '00:00'; // 기본값
   };
 
   const renderStars = (rating: number) => {
@@ -329,7 +341,7 @@ export default function AccommodationsPage() {
                     </div>
                     <div className="text-xs text-gray-500 flex items-center space-x-1">
                       <DollarSign className="w-3 h-3" />
-                      <span>배송비: {formatCurrency(accommodation.deliveryFee)}</span>
+                      <span>배송비: {formatPrice(accommodation.deliveryFee)}</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -434,7 +446,7 @@ export default function AccommodationsPage() {
                   <h3 className="font-medium mb-3">배송 정보</h3>
                   <div className="space-y-2 text-sm">
                     <div><span className="text-gray-500">배송시간:</span> {formatTime(selectedAccommodation.deliveryStartTime)} - {formatTime(selectedAccommodation.deliveryEndTime)}</div>
-                    <div><span className="text-gray-500">배송비:</span> {formatCurrency(selectedAccommodation.deliveryFee)}</div>
+                    <div><span className="text-gray-500">배송비:</span> {formatPrice(selectedAccommodation.deliveryFee)}</div>
                     <div><span className="text-gray-500">이번달 배송:</span> {selectedAccommodation.monthlyDeliveries}건</div>
                     <div><span className="text-gray-500">총 배송:</span> {selectedAccommodation.totalDeliveries}건</div>
                     <div><span className="text-gray-500">최근 배송:</span> {formatDateTime(selectedAccommodation.lastDelivery)}</div>

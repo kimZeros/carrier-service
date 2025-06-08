@@ -46,7 +46,7 @@ export default async function MembershipPage({ params }: PageProps) {
         '픽업 시간 변경 무료',
         '캐리어 보험 자동 적용'
       ],
-      savings: '매월 최대 ₩10,000,000 절약'
+      savings: '매월 최대 ₩10,000 절약'
     },
     {
       name: 'VIP',
@@ -65,7 +65,7 @@ export default async function MembershipPage({ params }: PageProps) {
         '공항 VIP 라운지 이용권',
         '파트너 호텔 특가 혜택'
       ],
-      savings: '매월 최대 ₩18,750,000 절약'
+      savings: '매월 최대 ₩18,750 절약'
     }
   ];
 
@@ -132,7 +132,7 @@ export default async function MembershipPage({ params }: PageProps) {
               <div className="text-sm opacity-75">멤버십 회원</div>
             </div>
             <div>
-              <div className="text-3xl font-bold">₩225,000만</div>
+              <div className="text-3xl font-bold">₩2,250</div>
               <div className="text-sm opacity-75">연간 절약 금액</div>
             </div>
             <div>
