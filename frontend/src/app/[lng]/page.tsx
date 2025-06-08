@@ -412,21 +412,21 @@ export default async function Page({ params }: PageProps) {
               <div className="text-5xl mb-6">🏨</div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">호텔 & 료칸</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">프론트 데스크에서 짐 픽업/수령이 가능한 프리미엄 숙소들</p>
-              <div className="text-purple-600 font-bold">¥8,000 - ¥50,000</div>
+              <div className="text-purple-600 font-bold">₩10,000,000 - ₩62,500,000</div>
             </div>
             
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all text-center transform hover:-translate-y-2">
               <div className="text-5xl mb-6">🏠</div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">에어비앤비</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">현지인처럼 머물며 호스트와 협의하여 짐 배송 시간 조율</p>
-              <div className="text-purple-600 font-bold">¥3,000 - ¥15,000</div>
+              <div className="text-purple-600 font-bold">₩3,750,000 - ₩18,750,000</div>
             </div>
             
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all text-center transform hover:-translate-y-2">
               <div className="text-5xl mb-6">🛏️</div>
               <h3 className="text-xl font-bold mb-4 text-gray-800">게스트하우스</h3>
               <p className="text-gray-600 mb-6 leading-relaxed">공용 짐 보관소에서 픽업/배송 가능한 경제적인 숙소</p>
-              <div className="text-purple-600 font-bold">¥2,500 - ¥6,000</div>
+              <div className="text-purple-600 font-bold">₩3,125,000 - ₩7,500,000</div>
             </div>
           </div>
 
@@ -440,7 +440,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">시부야 스카이 호텔</h4>
                     <p className="text-sm text-gray-600">시부야역 도보 3분 • CarryDrop 제휴</p>
                   </div>
-                  <div className="text-purple-600 font-bold">¥12,000</div>
+                  <div className="text-purple-600 font-bold">₩15,000,000</div>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                   <div className="text-3xl">⛩️</div>
@@ -448,7 +448,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">아사쿠사 전통 료칸</h4>
                     <p className="text-sm text-gray-600">센소지 도보 5분 • VIP 짐 서비스</p>
                   </div>
-                  <div className="text-purple-600 font-bold">¥28,000</div>
+                  <div className="text-purple-600 font-bold">₩35,000,000</div>
                 </div>
               </div>
             </div>
@@ -462,7 +462,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">도톤보리 리버사이드</h4>
                     <p className="text-sm text-gray-600">도톤보리 중심가 • 강변 뷰</p>
                   </div>
-                  <div className="text-purple-600 font-bold">¥15,000</div>
+                  <div className="text-purple-600 font-bold">₩18,750,000</div>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                   <div className="text-3xl">🎋</div>
@@ -470,7 +470,7 @@ export default async function Page({ params }: PageProps) {
                     <h4 className="font-bold text-gray-800">기온 헤리티지 인</h4>
                     <p className="text-sm text-gray-600">기온 게이샤 구역 • 전통 문화 체험</p>
                   </div>
-                  <div className="text-purple-600 font-bold">¥35,000</div>
+                  <div className="text-purple-600 font-bold">₩43,750,000</div>
                 </div>
               </div>
             </div>
@@ -483,6 +483,99 @@ export default async function Page({ params }: PageProps) {
             >
               🏨 전체 숙소 가이드 보기 →
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Membership & Reviews Section */}
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-6">
+          <div className="grid lg:grid-cols-2 gap-16">
+            {/* Membership Section */}
+            <div className="text-center lg:text-left">
+              <div className="inline-block bg-yellow-100 text-yellow-600 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                👑 멤버십
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+                CarryDrop 멤버십으로<br />
+                더 많은 혜택을 누리세요
+              </h2>
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                베이직, 프리미엄, VIP 플랜으로 구성된 멤버십을 통해 
+                무료 배송, 우선 고객지원, 특별 혜택을 경험하세요.
+              </p>
+              
+              <div className="grid md:grid-cols-3 gap-4 mb-8">
+                <div className="bg-gray-50 p-4 rounded-xl text-center">
+                  <div className="text-2xl mb-2">🎒</div>
+                  <div className="font-bold text-gray-800">베이직</div>
+                  <div className="text-sm text-gray-600">월 1회 무료</div>
+                </div>
+                <div className="bg-red-50 p-4 rounded-xl text-center border-2 border-red-200">
+                  <div className="text-2xl mb-2">🌟</div>
+                  <div className="font-bold text-red-600">프리미엄</div>
+                  <div className="text-sm text-gray-600">월 5회 무료</div>
+                </div>
+                <div className="bg-yellow-50 p-4 rounded-xl text-center">
+                  <div className="text-2xl mb-2">👑</div>
+                  <div className="font-bold text-yellow-600">VIP</div>
+                  <div className="text-sm text-gray-600">무제한 무료</div>
+                </div>
+              </div>
+
+              <Link 
+                href={`/${lng}/membership`}
+                className="inline-block bg-gradient-to-r from-yellow-500 to-red-500 hover:from-yellow-600 hover:to-red-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                멤버십 플랜 보기 →
+              </Link>
+            </div>
+
+            {/* Reviews Section */}
+            <div className="text-center lg:text-left">
+              <div className="inline-block bg-green-100 text-green-600 px-4 py-2 rounded-full text-sm font-medium mb-4">
+                ⭐ 고객 후기
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+                15,000+ 고객들의<br />
+                생생한 이용후기
+              </h2>
+              <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+                실제 이용고객들이 남긴 솔직한 후기와 경험담을 확인하고, 
+                여러분도 안심하고 서비스를 이용해보세요.
+              </p>
+              
+              <div className="bg-green-50 p-6 rounded-xl mb-8">
+                <div className="flex items-center justify-center mb-4">
+                  <div className="flex text-yellow-400 text-xl">
+                    ★★★★★
+                  </div>
+                  <span className="ml-2 text-2xl font-bold text-gray-800">4.8</span>
+                  <span className="ml-1 text-gray-600">/5</span>
+                </div>
+                <div className="grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <div className="text-lg font-bold text-gray-800">15,847</div>
+                    <div className="text-sm text-gray-600">총 후기</div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-gray-800">98%</div>
+                    <div className="text-sm text-gray-600">재이용 의사</div>
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-gray-800">77%</div>
+                    <div className="text-sm text-gray-600">5점 만점</div>
+                  </div>
+                </div>
+              </div>
+
+              <Link 
+                href={`/${lng}/reviews`}
+                className="inline-block bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                전체 후기 보기 →
+              </Link>
+            </div>
           </div>
         </div>
       </section>

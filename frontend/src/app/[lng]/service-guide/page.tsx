@@ -48,8 +48,8 @@ export default async function ServiceGuidePage({ params }: PageProps) {
       type: 'STANDARD',
       title: '스탠다드',
       subtitle: '일반 배송',
-      price: '¥2,500',
-      originalPrice: '¥3,000',
+      price: '₩2,500',
+      originalPrice: '₩3,000',
       features: [
         '공항 ↔ 호텔/Airbnb',
         '당일 배송 (4-6시간)',
@@ -64,8 +64,8 @@ export default async function ServiceGuidePage({ params }: PageProps) {
       type: 'EXPRESS',
       title: '익스프레스',
       subtitle: '빠른 배송',
-      price: '¥3,800',
-      originalPrice: '¥4,500',
+      price: '₩3,800',
+      originalPrice: '₩4,500',
       features: [
         '공항 ↔ 호텔/Airbnb',
         '당일 배송 (2-3시간)',
@@ -81,8 +81,8 @@ export default async function ServiceGuidePage({ params }: PageProps) {
       type: 'PREMIUM',
       title: '프리미엄',
       subtitle: '럭셔리 서비스',
-      price: '¥5,500',
-      originalPrice: '¥6,500',
+      price: '₩5,500',
+      originalPrice: '₩6,500',
       features: [
         '모든 지역 배송',
         '당일 배송 (1-2시간)',
