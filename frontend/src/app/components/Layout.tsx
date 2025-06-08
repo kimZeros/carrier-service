@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import LanguageSwitcher from './LanguageSwitcher';
 import Link from 'next/link';
 import CarryDropLogo from './CarryDropLogo';
@@ -17,6 +20,9 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children, lng, translations }) => {
+  const pathname = usePathname();
+  const isAdminPage = pathname?.includes('/admin');
+
   const navItems = [
     { href: 'service-guide', label: translations.nav_service_guide },
     { href: 'accommodation-guide', label: translations.nav_accommodations },
@@ -26,6 +32,15 @@ const Layout: React.FC<LayoutProps> = ({ children, lng, translations }) => {
 
   // 연도를 고정값으로 사용하여 hydration 문제 방지
   const currentYear = 2024;
+
+  // Admin page일 경우 헤더와 푸터 없이 children만 반환
+  if (isAdminPage) {
+    return (
+      <div className="min-h-screen">
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
