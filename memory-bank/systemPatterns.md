@@ -1,201 +1,278 @@
-# 시스템 패턴
+# 시스템 패턴 (System Patterns)
 
-## 전체 아키텍처
+## 아키텍처 개요
 
-```mermaid
-graph TB
-    subgraph "Frontend (Next.js)"
-        UI[사용자 인터페이스]
-        PAGES[페이지 컴포넌트]
-        COMPONENTS[공용 컴포넌트]
-        I18N[다국어 처리]
-    end
-    
-    subgraph "Backend (NestJS + Kotlin)"
-        API[REST API]
-        SERVICES[비즈니스 로직]
-        ENTITIES[데이터 엔티티]
-        SECURITY[Spring Security]
-    end
-    
-    subgraph "Database"
-        POSTGRES[(PostgreSQL/Neon)]
-    end
-    
-    UI --> API
-    PAGES --> COMPONENTS
-    API --> SERVICES
-    SERVICES --> ENTITIES
-    ENTITIES --> POSTGRES
+### 전체 시스템 구조
+```
+Frontend (Next.js) ←→ Backend (NestJS + Kotlin) ←→ Database (PostgreSQL via Neon)
+     ↓                        ↓                           ↓
+  - React 18               - Spring Boot              - Neon PostgreSQL
+  - TypeScript             - Kotlin + MyBatis         - 11개 숙소 데이터
+  - Tailwind CSS           - RESTful API               - UTF-8 한국어 지원
+  - i18n (다국어)          - CORS 설정                 - UUID 기본키
 ```
 
-## 핵심 설계 패턴
+### 주요 기술 스택
+- **Frontend**: Next.js 14, React 18, TypeScript, Tailwind CSS
+- **Backend**: NestJS, Kotlin, Spring Boot, MyBatis
+- **Database**: PostgreSQL via Neon (클라우드 데이터베이스)
+- **인프라**: Docker Compose, Nginx (설정 완료)
 
-### 1. 페이지 기반 라우팅
-```
-frontend/src/app/
-├── [lng]/                 # 다국어 라우팅
-│   ├── page.tsx           # 메인 페이지
-│   ├── service-guide/     # 서비스 안내
-│   ├── accommodation-guide/ # 숙소 안내
-│   ├── membership/        # 멤버십
-│   ├── request-delivery/  # 배송 신청
-│   └── reviews/           # 후기
-└── admin/                 # 관리자 페이지
-    ├── dashboard/
-    ├── reservations/
-    └── accommodations/
-```
+## 데이터베이스 설계
 
-### 2. 컴포넌트 패턴
-- **Page Components**: 각 페이지의 메인 컴포넌트
-- **Shared Components**: 재사용 가능한 공용 컴포넌트
-- **Layout Components**: 네비게이션, 푸터 등 레이아웃
+### 핵심 테이블 구조
 
-### 3. 데이터 흐름 패턴
-```mermaid
-sequenceDiagram
-    participant User
-    participant Frontend
-    participant Backend
-    participant Database
-    
-    User->>Frontend: 페이지 요청
-    Frontend->>Backend: API 호출
-    Backend->>Database: 데이터 조회
-    Database-->>Backend: 결과 반환
-    Backend-->>Frontend: JSON 응답
-    Frontend-->>User: 페이지 렌더링
-```
-
-## 주요 컴포넌트
-
-### Frontend 컴포넌트
-1. **AccommodationsList**: 실제 DB 숙소 데이터 표시
-2. **FAQSection**: 자주 묻는 질문
-3. **ReviewsCarousel**: 고객 후기 슬라이드
-4. **HeroBackground**: 메인 페이지 배경
-5. **Admin Components**: 관리자 대시보드/예약/숙소 관리
-
-### Backend 엔티티
-1. **Accommodation**: 숙소 정보
-   - 기본 정보 (이름, 주소, 연락처)
-   - 배송 정보 (시간, 요금, 특이사항)
-   - 위치 정보 (GPS 좌표)
-
-2. **Reservation**: 예약 정보 (향후 구현)
-3. **User**: 사용자 정보 (향후 구현)
-4. **Driver**: 기사 정보 (향후 구현)
-
-## API 설계 패턴
-
-### RESTful API 구조
-```
-/api/accommodations
-├── GET    /           # 전체 숙소 목록
-├── GET    /active     # 활성 숙소만
-├── GET    /:id        # 특정 숙소 상세
-├── POST   /           # 새 숙소 등록
-├── PUT    /:id        # 숙소 정보 수정
-└── DELETE /:id        # 숙소 삭제
-```
-
-### 응답 형식
-```json
-{
-  "id": "uuid",
-  "name": "숙소명",
-  "address": "주소",
-  "detailAddress": "상세주소",
-  "latitude": 35.6581,
-  "longitude": 139.7013,
-  "deliveryStartTime": "09:00:00",
-  "deliveryEndTime": "21:00:00",
-  "deliveryFee": 35000,
-  "isActive": true,
-  "notes": "특이사항",
-  "createdAt": "2024-01-15T10:00:00Z",
-  "updatedAt": "2024-01-15T10:00:00Z"
-}
-```
-
-## 보안 패턴
-
-### Spring Security 설정
-```kotlin
-// 공개 경로
-"/api/accommodations/**"  // 숙소 정보 조회
-"/api/auth/**"           // 인증 관련
-"/public/**"             // 정적 파일
-
-// 인증 필요 경로
-"/api/admin/**"          // 관리자 기능
-"/api/reservations/**"   // 예약 관리
-```
-
-### CORS 설정
-```kotlin
-@CrossOrigin(origins = ["http://localhost:3000"])
-```
-
-## 데이터베이스 패턴
-
-### 테이블 구조
+#### accommodations 테이블
 ```sql
-accommodations (
-    id UUID PRIMARY KEY,
-    name VARCHAR NOT NULL,
-    address TEXT NOT NULL,
-    detail_address VARCHAR,
-    latitude DECIMAL(10,8),
-    longitude DECIMAL(11,8),
+CREATE TABLE accommodations (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    name VARCHAR(255) NOT NULL,
+    address VARCHAR(500) NOT NULL,
+    detail_address VARCHAR(255),
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
     delivery_start_time TIME,
     delivery_end_time TIME,
     delivery_fee INTEGER,
     is_active BOOLEAN DEFAULT true,
     notes TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
 ```
 
-## 국제화 패턴
+#### PostgreSQL 특화 구현
+- **UUID 확장**: `CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`
+- **시간 데이터**: TIME 타입으로 저장, 배열로 반환 `[hour, minute]`
+- **한국어 지원**: UTF-8 인코딩으로 한국어 숙소명 저장
+- **현재 데이터**: 11개 숙소 (도쿄 4개, 오사카 2개, 교토 2개, 기타 3개)
 
-### 다국어 구조
+### 데이터 마이그레이션 히스토리
+1. **H2 → PostgreSQL**: 개발용 인메모리에서 클라우드 DB로 이전
+2. **문법 호환성**: `RANDOM_UUID()` → `uuid_generate_v4()`, `DOUBLE` → `DOUBLE PRECISION`
+3. **시간 처리**: PostgreSQL의 TIME 배열 반환 대응
+
+## API 설계 패턴
+
+### RESTful API 구조
 ```
-frontend/src/locales/
-├── ko/common.json    # 한국어
-├── ja/common.json    # 일본어 (향후)
-└── en/common.json    # 영어 (향후)
+GET /api/accommodations/active     - 활성 숙소 목록
+GET /api/accommodations/{id}       - 특정 숙소 상세
+POST /api/accommodations           - 숙소 등록 (관리자)
+PUT /api/accommodations/{id}       - 숙소 수정 (관리자)
+DELETE /api/accommodations/{id}    - 숙소 삭제 (관리자)
 ```
 
-### 라우팅 패턴
+#### 응답 데이터 형식
+```typescript
+interface Accommodation {
+  id: string;
+  name: string;
+  address: string;
+  detailAddress?: string;
+  latitude: number;
+  longitude: number;
+  deliveryStartTime: string | number[]; // PostgreSQL 시간 배열 대응
+  deliveryEndTime: string | number[];
+  deliveryFee: number;
+  isActive: boolean;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 ```
-/ko/service-guide     # 한국어
-/ja/service-guide     # 일본어
-/en/service-guide     # 영어
+
+### CORS 및 보안 설정
+```kotlin
+@Configuration
+@EnableWebSecurity
+class SecurityConfig {
+    // /api/accommodations/** 경로 허용
+    // CORS 설정으로 Frontend(3000) ↔ Backend(8080) 통신
+}
 ```
 
-## 에러 처리 패턴
+## 프론트엔드 아키텍처
 
-### Frontend 에러 처리
-1. **Loading State**: 데이터 로딩 중 표시
-2. **Error State**: API 오류시 사용자 친화적 메시지
-3. **Empty State**: 데이터 없을 때 안내 메시지
+### 페이지 구조 패턴
+```
+src/app/[lng]/
+├── page.tsx                    # 메인 페이지
+├── accommodation-guide/        # 숙소 안내 (API 연동)
+├── service-guide/             # 서비스 가이드
+├── membership/                # 멤버십 페이지
+├── reviews/                   # 이용후기 (신규)
+├── request-delivery/          # 배송 신청
+├── login/                     # 로그인
+└── signup/                    # 회원가입
+```
 
-### Backend 에러 처리
-1. **HTTP Status Codes**: 표준 상태 코드 사용
-2. **Error Response**: 일관된 에러 응답 형식
-3. **Logging**: 서버 로그를 통한 디버깅
+### 컴포넌트 패턴
 
-## 성능 최적화 패턴
+#### 1. Client Component 패턴
+```typescript
+'use client';
+import { useState, useEffect } from 'react';
 
-### Frontend 최적화
-- **Code Splitting**: 페이지별 번들 분리
-- **Image Optimization**: Next.js Image 컴포넌트 활용
-- **Static Generation**: 가능한 페이지는 SSG 적용
+// API 호출과 상태 관리를 포함한 컴포넌트
+export default function ComponentName({ params }: PageProps) {
+  const [lng, setLng] = useState('ko');
+  // params 비동기 처리 패턴
+  useEffect(() => {
+    const initializePage = async () => {
+      const resolvedParams = await params;
+      setLng(resolvedParams.lng);
+    };
+    initializePage();
+  }, [params]);
+}
+```
 
-### Backend 최적화
-- **Database Indexing**: 자주 조회되는 필드 인덱싱
-- **Caching**: 정적 데이터 캐싱 (향후 구현)
-- **Connection Pooling**: DB 연결 풀 관리 
+#### 2. 시간 포맷팅 패턴
+```typescript
+const formatTime = (time: string | number[]) => {
+  // PostgreSQL 배열 [hour, minute] 처리
+  if (Array.isArray(time)) {
+    const [hour, minute] = time;
+    return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+  }
+  // 문자열 형태 처리
+  if (typeof time === 'string') {
+    return time.substring(0, 5);
+  }
+  return '00:00';
+};
+```
+
+#### 3. 가격 표시 패턴
+```typescript
+const formatPrice = (amount: number) => {
+  // 큰 숫자는 100으로 나누어서 현실적인 가격으로 표시
+  if (amount > 100000) {
+    return `₩${Math.floor(amount / 100).toLocaleString()}`;
+  }
+  return `₩${amount.toLocaleString()}`;
+};
+```
+
+### 다국어 지원 패턴
+```typescript
+// Layout에서 번역 전달
+const translations = {
+  nav_service_guide: t('nav_service_guide'),
+  nav_accommodations: t('nav_accommodations'),
+  nav_membership: t('nav_membership'),
+  nav_reviews: t('nav_reviews'),
+  // ...
+};
+```
+
+## 스타일링 패턴
+
+### Tailwind CSS 구조
+- **공통 스타일**: `src/styles/common.scss` 또는 `tailwind.css`에 집중
+- **인라인 스타일 금지**: 모든 스타일은 CSS 파일로 관리
+- **컴포넌트별 스타일 금지**: 페이지/컴포넌트 내부 인라인 스타일 사용 안 함
+
+### UI 디자인 패턴
+
+#### 1. 그라데이션 배경
+```css
+bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700
+bg-gradient-to-r from-purple-600 to-blue-600
+```
+
+#### 2. 카드 디자인
+```css
+bg-white rounded-2xl shadow-sm border hover:shadow-lg transition-all
+```
+
+#### 3. 버튼 스타일
+```css
+/* 주요 액션 */
+bg-purple-500 text-white font-bold py-4 px-8 rounded-lg hover:bg-purple-600 transition-all transform hover:scale-105
+
+/* 보조 액션 */
+border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white/10 transition-all
+```
+
+## 데이터 플로우 패턴
+
+### API 호출 플로우
+```
+1. Frontend Component (useEffect)
+   ↓
+2. fetch('http://localhost:8080/api/accommodations/active')
+   ↓
+3. Backend Controller (AccommodationController)
+   ↓
+4. Service Layer → MyBatis Mapper
+   ↓
+5. PostgreSQL Database (Neon)
+   ↓
+6. Response → Frontend State Update
+```
+
+### 에러 처리 패턴
+```typescript
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState<string | null>(null);
+
+try {
+  const response = await fetch(API_URL);
+  if (!response.ok) {
+    throw new Error('Failed to fetch data');
+  }
+  const data = await response.json();
+  setData(data);
+} catch (err) {
+  setError(err instanceof Error ? err.message : 'An error occurred');
+} finally {
+  setLoading(false);
+}
+```
+
+## 현재 아키텍처 이슈
+
+### 1. API 연동 문제
+**증상**: Frontend에서 Backend API 호출 실패
+**원인**: 
+- Backend 서버 시작 문제 (포트 8080)
+- CORS 설정 이슈 가능성
+- Git Bash 환경 실행 문제
+
+**해결 방향**:
+- Git Bash에서 `./gradlew bootRun` 안정적 실행
+- CORS 설정 재확인
+- 포트 충돌 문제 확인
+
+### 2. 데이터 표시 문제
+**현상**: accommodation-guide 페이지에서 5개만 표시
+**예상 원인**:
+- API 호출 실패로 인한 기본 하드코딩 데이터 표시
+- PostgreSQL 연결 문제
+- 데이터 로딩 오류
+
+## 배포 및 환경 구성
+
+### 개발 환경
+- **Frontend**: `npm run dev` (포트 3000)
+- **Backend**: `./gradlew bootRun` (포트 8080)
+- **Database**: PostgreSQL via Neon (클라우드)
+- **터미널**: Git Bash 환경 고정
+
+### Docker 구성 (설정 완료)
+- `docker-compose.yml`: 멀티 컨테이너 구성
+- `nginx.conf`: 리버스 프록시 설정
+- 실제 배포시 사용 가능
+
+## 보안 및 인증 패턴
+
+### 목업 기반 접근
+- **결제 시스템**: 실제 API 키 사용 금지, 목업 레이어로 대체
+- **로그인/본인인증**: 목업 구현으로 개발
+- **관리자 기능**: 기본 인증만 구현
+
+### 데이터 보안
+- PostgreSQL 연결은 환경변수 `process.env.DATABASE_URL` 사용
+- Neon 클라우드 데이터베이스의 기본 보안 정책 적용 

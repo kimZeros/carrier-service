@@ -380,9 +380,12 @@ export default function ReviewsPage({ params }: PageProps) {
             >
               서비스 이용하기
             </Link>
-            <button className="border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white/10 transition-all">
+            <Link 
+              href={`/${lng}/reviews/write`}
+              className="border-2 border-white text-white font-bold py-4 px-8 rounded-lg hover:bg-white/10 transition-all inline-block"
+            >
               후기 작성하기
-            </button>
+            </Link>
           </div>
         </div>
       </section>
